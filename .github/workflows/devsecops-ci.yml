@@ -1,4 +1,4 @@
-name: DevSecOps Automated Header Audit
+name: DevSecOps Automated Bulk Security Audit
 
 on:
   push:
@@ -24,12 +24,12 @@ jobs:
         python -m pip install --upgrade pip
         pip install requests
 
-    - name: Run Web Security Header Scan
+    - name: Run Web Security Bulk Scan
       run: |
-        python auditor.py github.com
+        python auditor.py targets.txt
 
     - name: Archive Security Scan Artifacts
       uses: actions/upload-artifact@v4
       with:
-        name: header-security-report
-        path: github.com_report.json
+        name: bulk-security-posture-report
+        path: bulk_audit_report.json
