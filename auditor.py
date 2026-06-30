@@ -24,7 +24,6 @@ def audit_url(url):
         print(f"[-] Error connecting to target URL: {e}")
         return
 
-    # Dictionary to hold our report data
     report_data = {
         "target_url": url,
         "summary": {"passed": 0, "missing": 0},
