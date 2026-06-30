@@ -1,5 +1,6 @@
 import requests
 import sys
+import json
 
 SECURITY_HEADERS = {
     "Strict-Transport-Security": "Enforces HTTPS connections to prevent man-in-the-middle attacks.",
@@ -13,7 +14,7 @@ def audit_url(url):
     if not url.startswith("http://") and not url.startswith("https://"):
         url = "https://" + url
 
-    print(f"\n[+] Starting Security Header Audit for: {url}")
+    print(f"\n[+] Executing Automated Audit for: {url}")
     print("-" * 60)
 
     try:
@@ -23,27 +24,39 @@ def audit_url(url):
         print(f"[-] Error connecting to target URL: {e}")
         return
 
-    passed_count = 0
-    failed_count = 0
+    # Dictionary to hold our report data
+    report_data = {
+        "target_url": url,
+        "summary": {"passed": 0, "missing": 0},
+        "results": {}
+    }
 
     for header, description in SECURITY_HEADERS.items():
         header_key = next((k for k in headers if k.lower() == header.lower()), None)
         
         if header_key:
             print(f"[PASSED] {header}")
-            print(f"         Value: {headers[header_key]}")
-            passed_count += 1
+            report_data["results"][header] = {
+                "status": "PASSED",
+                "value": headers[header_key]
+            }
+            report_data["summary"]["passed"] += 1
         else:
             print(f"[MISSING] {header}")
-            print(f"          Risk: {description}")
-            failed_count += 1
-        print("-" * 60)
+            report_data["results"][header] = {
+                "status": "MISSING",
+                "risk": description
+            }
+            report_data["summary"]["missing"] += 1
 
-    print("\n[=] AUDIT SUMMARY")
-    print(f"    Total Checked: {len(SECURITY_HEADERS)}")
-    print(f"    Passed:        {passed_count}")
-    print(f"    Missing/Weak:  {failed_count}")
+    safe_filename = url.replace("https://", "").replace("http://", "").replace("/", "_") + "_report.json"
+    
+    with open(safe_filename, "w") as f:
+        json.dump(report_data, f, indent=4)
+    
+    print("-" * 60)
+    print(f"[SUCCESS] Vulnerability scan complete. Report saved to: {safe_filename}")
 
 if __name__ == "__main__":
-    target = sys.argv[1] if len(sys.argv) > 1 else "example.com"
+    target = sys.argv[1] if len(sys.argv) > 1 else "github.com"
     audit_url(target)
