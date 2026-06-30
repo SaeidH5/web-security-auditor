@@ -47,18 +47,26 @@ pip install requests
 ## 💻 Usage & Demonstration
 python auditor.py github.com
 
-## Sample Output Report (github.com_report.json)
+### Sample Output Report (`bulk_audit_report.json`)
+Upon a successful bulk scan, the auditor generates an aggregated, structured JSON file tracking security outcomes across all targets:
+
 ```json
 {
-    "target_url": "https://github.com",
-    "summary": {
-        "passed": 5,
-        "missing": 0
-    },
-    "results": {
-        "Strict-Transport-Security": {
-            "status": "PASSED",
-            "value": "max-age=31536000; includeSubDomains; preload"
+    "github.com": {
+        "summary": {
+            "passed": 5,
+            "missing": 0
+        },
+        "headers_results": {
+            "Strict-Transport-Security": {
+                "status": "PASSED",
+                "value": "max-age=31536000; includeSubDomains; preload"
+            }
+        },
+        "ssl_tls_results": {
+            "tls_version": "TLSv1.3",
+            "certificate_status": "VALID",
+            "days_until_expiry": 180
         }
     }
 }
