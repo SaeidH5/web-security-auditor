@@ -12,6 +12,7 @@ This tool evaluates a target URL's HTTP response headers to identify missing or 
 * **OWASP Alignment:** Maps checks directly against core industry-standard security vulnerabilities.
 * **Structured JSON Artifacts:** Automatically generates an audit report (`[target]_report.json`) for easy integration into modern DevSecOps pipelines.
 * **Risk Intelligence:** Provides clear technical risk justifications for every missing security control.
+* **Transport Layer Intelligence:** Initiates secure network handshakes to audit TLS protocol versions and calculate certificate expiration timelines.
 
 ---
 
